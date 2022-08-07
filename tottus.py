@@ -80,28 +80,37 @@ WebDriverWait(driver, 10)\
                                       'input#inputSearchBar')))\
     .send_keys("arroz") # cambiar a la hora de ejecutar 
 
-porsipopup()
-
-# Click en buscar
-
 WebDriverWait(driver, 10)\
     .until(EC.element_to_be_clickable((By.CSS_SELECTOR,
                                       'button.jsx-2851002401.searchIcon')))\
     .click()
 
+driver.implicitly_wait(5)
 
-
-
+porsipopup()
 
 ##### 
 # Descargar los datos
 
 driver.maximize_window() # maximiza ventana
-driver.implicitly_wait(5) # espera para que cargue la página y se puedan descargar datos
+driver.implicitly_wait(10) # espera para que cargue la página y se puedan descargar datos
 
-titulos = driver.find_element("xpath", "/html/body/div[1]/section/div[1]/section/div[2]/div[2]")
-titulos = titulos.text
-#print(titulos)
+porsipopup()
 
-productos2 = re.findall('ARROZ.*', titulos)
-print(productos2)
+tit_prod=driver.find_elements("xpath","//h2[@class='jsx-369422875 name title mini']")
+tit_prod=[title.text for title in tit_prod]
+
+prec_prod=driver.find_elements("xpath","//span[@class='list price medium cmrPrice ']")
+prec_prod=[title.text for title in prec_prod]
+
+prec_prod = list(filter(None, prec_prod))
+
+#print(tit_prod)
+#print(prec_prod)
+
+#print(len(tit_prod))
+#print(len(prec_prod))
+
+df1 = pd.DataFrame({"titulo":tit_prod,"precios":prec_prod})
+print(df1)
+
